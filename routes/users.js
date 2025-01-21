@@ -21,6 +21,7 @@ router.get('/', (req, res) => {
             <input type="password" id="password" name="password" required><br>
 
             <button type="submit">Iniciar sesión</button>
+            <a href="/dashboard">Dashboard</a>
         </form>
     `;
     res.send(loginForm);
@@ -30,11 +31,11 @@ router.post('/login', (req, res) => {
     const { username, password } = req.body;
     const user = users.find((user) => user.username === username && user.password === password);
 
-    if (user) {
-        const token = generateToken(user);
-        req.session.token = token;
+    if (user) { //Sie el usuario existe
+        const token = generateToken(user); //Genero el token
+        req.session.token = token; // Guardo el token  en el session del usuario
         res.redirect('/dashboard');
-    } else {
+    } else { //Si el usuario no existe
         res.status(401).json({mensaje: 'Credenciales incorrectas'});
     }
 });
